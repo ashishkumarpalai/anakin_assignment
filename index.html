@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <title>Amazon Scraper Frontend</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+
+        #app {
+            text-align: center;
+        }
+
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        #result {
+            margin-top: 20px;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="app">
+        <button onclick="startScraping()">Start Scraping</button>
+        <div id="result"></div>
+    </div>
+    <script src="script.js"></script>
+</body>
+
+</html>
+<script>
+    async function startScraping() {
+        try {
+            // Show loading message
+            document.getElementById('result').innerHTML = '<p>Loading...</p>';
+
+            // Make a request to the backend (replace 'backend-api-url' with your actual backend URL)
+            const response = await fetch('backend-api-url');
+            const data = await response.json();
+
+            // Display the scraped data
+            displayData(data);
+        } catch (error) {
+            console.error('Error during scraping:', error.message);
+            document.getElementById('result').innerHTML = '<p>Error during scraping. Please check the console for details.</p>';
+        }
+    }
+
+    function displayData(data) {
+        const resultDiv = document.getElementById('result');
+        resultDiv.innerHTML = '';
+
+        if (data.length === 0) {
+            resultDiv.innerHTML = '<p>No data scraped.</p>';
+            return;
+        }
+
+        data.forEach((item) => {
+            const productDiv = document.createElement('div');
+            productDiv.classList.add('product');
+
+            // Customize this based on the structure of your scraped data
+            const productName = document.createElement('h3');
+            productName.textContent = item.productName;
+            productDiv.appendChild(productName);
+
+            resultDiv.appendChild(productDiv);
+        });
+    }
+
+</script>
